@@ -23,7 +23,7 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       await signIn(email, password);
-      router.replace('/Home'); 
+      router.replace('/(tabs)/Home'); 
     } catch (e: any) {
       if (e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password') {
         setError('Invalid credentials.');

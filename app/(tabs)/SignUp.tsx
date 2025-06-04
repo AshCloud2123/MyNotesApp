@@ -3,9 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { signUp } from '../../authUtils';
 import { useRouter } from 'expo-router';
 
-/**
- * Sign Up screen for user registration.
- */
+
 export default function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,7 +25,7 @@ export default function SignUpScreen() {
     setLoading(true);
     try {
       await signUp(email, password);
-      router.replace('/Login');
+      router.replace('/(tabs)/Login');
     } catch (e: any) {
       if (e.code === 'auth/email-already-in-use') {
         setError('Email already in use.');

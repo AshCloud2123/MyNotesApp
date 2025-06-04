@@ -42,7 +42,7 @@ export default function HomeScreen() {
   const handleLogout = async () => {
     try {
       await logout();
-      router.replace('/Login');
+      router.replace('/(tabs)/Login');
     } catch (error) {
       console.error('Logout failed:', error);
       Alert.alert('Error', 'Failed to logout. Please try again.');
@@ -80,7 +80,7 @@ export default function HomeScreen() {
       style={styles.note}
       onPress={() => {
         router.push({
-          pathname: '/NoteDetail',
+          pathname: '/(tabs)/NoteDetail',
           params: { id: item.id }
         });
       }}
@@ -124,7 +124,7 @@ export default function HomeScreen() {
 
       <Button
         title="Create New Note"
-        onPress={() => router.push('/NoteEdit')}
+        onPress={() => router.push('/(tabs)/NoteEdit')}
       />
 
       {loading && !refreshing ? (
