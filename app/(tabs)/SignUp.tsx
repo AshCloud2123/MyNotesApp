@@ -1,36 +1,42 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { signIn } from '../authUtils'; 
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { signUp } from '../authUtils';
 import { useRouter } from 'expo-router';
 
-
 /**
- * Login screen for existing users.
+ * Sign Up screen for user registration.
  */
-export default function LoginScreen() { 
+export default function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleLogin = async () => {
+  const handleSignUp = async () => {
     setError('');
-    if (!email || !password) {
-      setError('Email and password are required.');
+    if (!email || !password || !confirmPassword) {
+      setError('All fields are required.');
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
       return;
     }
     setLoading(true);
     try {
-      await signIn(email, password);
-      router.replace('/Home'); 
+      await signUp(email, password);
+      router.replace('/Login');
     } catch (e: any) {
-      if (e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password') {
-        setError('Invalid credentials.');
+      if (e.code === 'auth/email-already-in-use') {
+        setError('Email already in use.');
       } else if (e.code === 'auth/invalid-email') {
         setError('Invalid email address.');
+      } else if (e.code === 'auth/weak-password') {
+        setError('Password should be at least 6 characters.');
       } else {
-        setError('Failed to login.');
+        setError('Failed to sign up.');
       }
     } finally {
       setLoading(false);
@@ -39,7 +45,7 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Sign Up</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -55,9 +61,16 @@ export default function LoginScreen() {
         value={password}
         onChangeText={setPassword}
       />
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password"
+        secureTextEntry
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+      />
       {error ? <Text style={styles.error}>{error}</Text> : null}
-      <Button title={loading ? 'Logging In...' : 'Login'} onPress={handleLogin} disabled={loading} />
-      <Button title="Don't have an account? Sign Up" onPress={() => router.replace('/SignUp')} />
+      <Button title={loading ? 'Signing Up...' : 'Sign Up'} onPress={handleSignUp} disabled={loading} />
+      <Button title="Already have an account? Login" onPress={() => router.replace('/Login')} />
     </View>
   );
 }
