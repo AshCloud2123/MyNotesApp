@@ -10,8 +10,8 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { getNotes, searchNotes, deleteNote, Note } from '../firestoreUtils';
-import { logout } from '../authUtils';
+import { getNotes, searchNotes, deleteNote, Note } from '../../firestoreUtils'
+import { logout } from '../../authUtils';
 import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {

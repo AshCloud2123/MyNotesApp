@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { signIn } from '../authUtils'; 
+import { signIn } from '../../authUtils'; 
 import { useRouter } from 'expo-router';
 
 
