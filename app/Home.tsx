@@ -14,6 +14,7 @@ import {
 import { getNotes, searchNotes, deleteNote, Note } from '../firestoreUtils'
 import { logout } from '../authUtils';
 import { useRouter } from 'expo-router';
+import { useTheme } from './ThemeContext';
 
 export default function HomeScreen() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -21,6 +22,7 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const router = useRouter();
+  const { theme, colors, toggleTheme } = useTheme();
 
   const fetchNotes = useCallback(async () => {
     setLoading(true);
@@ -77,7 +79,7 @@ export default function HomeScreen() {
     if (!item.id) return null;
     return (
       <TouchableOpacity
-        style={styles.note}
+        style={[styles.note, { backgroundColor: colors.card }]}
         activeOpacity={0.85}
         onPress={() => {
           router.push({
@@ -87,18 +89,18 @@ export default function HomeScreen() {
         }}
       >
         <View style={styles.noteContent}>
-          <Text style={styles.noteTitle} numberOfLines={1}>
+          <Text style={[styles.noteTitle, { color: colors.text }]} numberOfLines={1}>
             {item.title}
           </Text>
-          <Text style={styles.noteDate}>
+          <Text style={[styles.noteDate, { color: colors.subtitle }]}>
             {item.createdAt.toDate().toLocaleString()}
           </Text>
         </View>
         <TouchableOpacity
-          style={styles.deleteButton}
+          style={[styles.deleteButton, { backgroundColor: theme === 'dark' ? '#3a2323' : '#ffeaea' }]}
           onPress={() => handleDelete(item.id!)}
         >
-          <Text style={styles.deleteButtonText}>🗑</Text>
+          <Text style={[styles.deleteButtonText, { color: colors.error }]}>🗑</Text>
         </TouchableOpacity>
       </TouchableOpacity>
     );
@@ -110,26 +112,32 @@ export default function HomeScreen() {
   }, [fetchNotes]);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={styles.header}>
-          <Text style={styles.title}>📝 My Notes</Text>
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-            <Text style={styles.logoutButtonText}>Logout</Text>
+          <Text style={[styles.title, { color: colors.primary }]}>📝 My Notes</Text>
+          <TouchableOpacity style={[styles.logoutButton, { backgroundColor: colors.card, borderColor: colors.input }]} onPress={handleLogout}>
+            <Text style={[styles.logoutButtonText, { color: colors.primary }]}>Logout</Text>
           </TouchableOpacity>
         </View>
 
+        <TouchableOpacity style={styles.toggleButton} onPress={toggleTheme}>
+          <Text style={[styles.toggleButtonText, { color: colors.link }]}>
+            Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
+          </Text>
+        </TouchableOpacity>
+
         <View style={styles.searchRow}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { backgroundColor: colors.input, color: colors.text }]}
             placeholder="🔍 Search notes..."
             value={search}
             onChangeText={setSearch}
             clearButtonMode="while-editing"
-            placeholderTextColor="#aaa"
+            placeholderTextColor={colors.subtitle}
           />
           <TouchableOpacity
-            style={styles.addButton}
+            style={[styles.addButton, { backgroundColor: colors.primary }]}
             onPress={() => router.push('/NoteEdit')}
           >
             <Text style={styles.addButtonText}>＋</Text>
@@ -137,7 +145,7 @@ export default function HomeScreen() {
         </View>
 
         {loading && !refreshing ? (
-          <ActivityIndicator style={styles.loading} size="large" color="#4f8cff" />
+          <ActivityIndicator style={styles.loading} size="large" color={colors.primary} />
         ) : (
           <FlatList
             data={notes}
@@ -152,7 +160,7 @@ export default function HomeScreen() {
             onRefresh={handleRefresh}
             contentContainerStyle={styles.list}
             ListEmptyComponent={
-              <Text style={styles.empty}>
+              <Text style={[styles.empty, { color: colors.subtitle }]}>
                 {search ? 'No notes found matching your search.' : 'No notes yet. Create one!'}
               </Text>
             }
@@ -166,12 +174,10 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#f4f6fb',
   },
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f4f6fb',
   },
   header: {
     flexDirection: 'row',
@@ -183,22 +189,26 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#4f8cff',
     letterSpacing: 1,
   },
   logoutButton: {
-    backgroundColor: '#fff',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
     elevation: 2,
   },
   logoutButtonText: {
-    color: '#4f8cff',
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  toggleButton: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  toggleButtonText: {
+    fontSize: 15,
+    fontWeight: 'bold',
   },
   searchRow: {
     flexDirection: 'row',
@@ -209,7 +219,6 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     borderWidth: 0,
-    backgroundColor: '#fff',
     borderRadius: 20,
     paddingHorizontal: 18,
     paddingVertical: 12,
@@ -222,7 +231,6 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   addButton: {
-    backgroundColor: '#4f8cff',
     borderRadius: 20,
     width: 44,
     height: 44,
@@ -246,7 +254,6 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
   note: {
-    backgroundColor: '#fff',
     borderRadius: 14,
     padding: 18,
     marginBottom: 14,
@@ -266,15 +273,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     marginBottom: 2,
-    color: '#222',
   },
   noteDate: {
     fontSize: 12,
-    color: '#8fa1b3',
     marginBottom: 6,
   },
   deleteButton: {
-    backgroundColor: '#ffeaea',
     borderRadius: 16,
     padding: 8,
     alignItems: 'center',
@@ -284,11 +288,9 @@ const styles = StyleSheet.create({
   },
   deleteButtonText: {
     fontSize: 20,
-    color: '#e74c3c',
   },
   empty: {
     textAlign: 'center',
-    color: '#b0b0b0',
     fontSize: 17,
     marginTop: 48,
   },
