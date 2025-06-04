@@ -80,7 +80,7 @@ export default function HomeScreen() {
       style={styles.note}
       onPress={() => {
         router.push({
-          pathname: '/(tabs)/NoteDetail',
+          pathname: '/NoteDetail',
           params: { id: item.id }
         });
       }}
@@ -124,7 +124,7 @@ export default function HomeScreen() {
 
       <Button
         title="Create New Note"
-        onPress={() => router.push('/(tabs)/NoteEdit')}
+        onPress={() => router.push('/NoteEdit')}
       />
 
       {loading && !refreshing ? (
