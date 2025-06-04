@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { signIn } from '../../authUtils'; 
+import { signIn } from '../authUtils'; 
 import { useRouter } from 'expo-router';
 
 
@@ -57,7 +57,7 @@ export default function LoginScreen() {
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <Button title={loading ? 'Logging In...' : 'Login'} onPress={handleLogin} disabled={loading} />
-      <Button title="Don't have an account? Sign Up" onPress={() => router.replace('/SignUp')} />
+      <Button title="Don't have an account? Sign Up" onPress={() => router.replace('/auth/SignUp')} />
     </View>
   );
 }

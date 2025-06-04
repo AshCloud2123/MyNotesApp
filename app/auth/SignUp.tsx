@@ -68,7 +68,7 @@ export default function SignUpScreen() {
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <Button title={loading ? 'Signing Up...' : 'Sign Up'} onPress={handleSignUp} disabled={loading} />
-      <Button title="Already have an account? Login" onPress={() => router.replace('/Login')} />
+      <Button title="Already have an account? Login" onPress={() => router.replace('../index')} />
     </View>
   );
 }
