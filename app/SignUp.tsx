@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { signUp } from '../authUtils';
 import { useRouter } from 'expo-router';
-
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState('');
@@ -43,7 +42,8 @@ export default function SignUpScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
+      <Text style={styles.title}>Create Account</Text>
+      <Text style={styles.subtitle}>Sign up to get started</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -51,6 +51,7 @@ export default function SignUpScreen() {
         keyboardType="email-address"
         value={email}
         onChangeText={setEmail}
+        placeholderTextColor="#aaa"
       />
       <TextInput
         style={styles.input}
@@ -58,6 +59,7 @@ export default function SignUpScreen() {
         secureTextEntry
         value={password}
         onChangeText={setPassword}
+        placeholderTextColor="#aaa"
       />
       <TextInput
         style={styles.input}
@@ -65,17 +67,35 @@ export default function SignUpScreen() {
         secureTextEntry
         value={confirmPassword}
         onChangeText={setConfirmPassword}
+        placeholderTextColor="#aaa"
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}
-      <Button title={loading ? 'Signing Up...' : 'Sign Up'} onPress={handleSignUp} disabled={loading} />
-      <Button title="Already have an account? Login" onPress={() => router.replace('../index')} />
+      <TouchableOpacity
+        style={[styles.button, loading && styles.buttonDisabled]}
+        onPress={handleSignUp}
+        disabled={loading}
+      >
+        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Sign Up</Text>}
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.linkButton}
+        onPress={() => router.replace('/')}
+      >
+        <Text style={styles.linkText}>Already have an account? <Text style={{ color: '#4f8cff', fontWeight: 'bold' }}>Login</Text></Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24 },
-  title: { fontSize: 28, fontWeight: 'bold', marginBottom: 24, textAlign: 'center' },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 12, marginBottom: 12 },
+  container: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#f4f6fb' },
+  title: { fontSize: 32, fontWeight: 'bold', marginBottom: 8, textAlign: 'center', color: '#4f8cff' },
+  subtitle: { fontSize: 16, color: '#888', marginBottom: 24, textAlign: 'center' },
+  input: { borderWidth: 0, backgroundColor: '#fff', borderRadius: 14, padding: 16, marginBottom: 14, fontSize: 16, elevation: 2 },
   error: { color: 'red', marginBottom: 12, textAlign: 'center' },
+  button: { backgroundColor: '#4f8cff', borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginBottom: 12, elevation: 2 },
+  buttonDisabled: { opacity: 0.7 },
+  buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
+  linkButton: { alignItems: 'center', marginTop: 8 },
+  linkText: { color: '#888', fontSize: 15 },
 });
