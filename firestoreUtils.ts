@@ -1,5 +1,5 @@
 import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, doc, getDoc, updateDoc, deleteDoc, Timestamp } from 'firebase/firestore';
-import app from './firebaseConfig';
+import { app } from './firebaseConfig';
 import { getCurrentUser } from './authUtils';
 
 const db = getFirestore(app);
