@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { signUp } from '../../authUtils';
+import { signUp } from '../authUtils';
 import { useRouter } from 'expo-router';
 
 
@@ -25,7 +25,7 @@ export default function SignUpScreen() {
     setLoading(true);
     try {
       await signUp(email, password);
-      router.replace('../(tabs)/Login');
+      router.replace('/index');
     } catch (e: any) {
       if (e.code === 'auth/email-already-in-use') {
         setError('Email already in use.');

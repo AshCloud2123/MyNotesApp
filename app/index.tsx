@@ -23,7 +23,7 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       await signIn(email, password);
-      router.replace('/(tabs)/Home'); 
+      router.replace('/Home'); 
     } catch (e: any) {
       if (e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password') {
         setError('Invalid credentials.');
@@ -57,7 +57,7 @@ export default function LoginScreen() {
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <Button title={loading ? 'Logging In...' : 'Login'} onPress={handleLogin} disabled={loading} />
-      <Button title="Don't have an account? Sign Up" onPress={() => router.replace('/auth/SignUp')} />
+      <Button title="Don't have an account? Sign Up" onPress={() => router.replace('/SignUp')} />
     </View>
   );
 }

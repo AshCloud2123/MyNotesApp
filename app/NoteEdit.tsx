@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { createNote, updateNote, getNote, Note } from '../../firestoreUtils';
+import { createNote, updateNote, getNote, Note } from '../firestoreUtils';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
 /**
