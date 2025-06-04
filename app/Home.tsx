@@ -42,7 +42,7 @@ export default function HomeScreen() {
   const handleLogout = async () => {
     try {
       await logout();
-      router.replace('../index');
+      router.replace('/');
     } catch (error) {
       console.error('Logout failed:', error);
       Alert.alert('Error', 'Failed to logout. Please try again.');
