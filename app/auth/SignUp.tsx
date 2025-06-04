@@ -25,7 +25,7 @@ export default function SignUpScreen() {
     setLoading(true);
     try {
       await signUp(email, password);
-      router.replace('/(tabs)/Login');
+      router.replace('../(tabs)/Login');
     } catch (e: any) {
       if (e.code === 'auth/email-already-in-use') {
         setError('Email already in use.');
